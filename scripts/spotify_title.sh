@@ -30,10 +30,10 @@ print_spotify_title() {
     elif [ $spotify_title_max -ge $title_length ]; then
       echo $title
     else
-      nb_char=$(($spotify_title_max-3))
+      nb_char=$(($spotify_title_max-1))
       title_cut=$(echo $title | cut -c -$nb_char)
       echo -n $title_cut
-      echo "..."
+      echo "…"
     fi
   fi
 }

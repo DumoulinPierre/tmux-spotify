@@ -30,10 +30,10 @@ print_spotify_album() {
     elif [ $spotify_album_max -ge $album_length ]; then
       echo $album
     else
-      nb_char=$(($spotify_album_max-3))
+      nb_char=$(($spotify_album_max-1))
       album_cut=$(echo $album | cut -c -$nb_char)
       echo -n $album_cut
-      echo "..."
+      echo "…"
     fi
   fi
 }

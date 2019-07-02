@@ -30,10 +30,10 @@ print_spotify_artist() {
     elif [ $spotify_artist_max -ge $artist_length ]; then
       echo $artist
     else
-      nb_char=$(($spotify_artist_max-3))
+      nb_char=$(($spotify_artist_max-1))
       artist_cut=$(echo $artist | cut -c -$nb_char)
       echo -n $artist_cut
-      echo "..."
+      echo "…"
     fi
   fi
 }
