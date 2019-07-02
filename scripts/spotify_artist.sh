@@ -2,6 +2,16 @@
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+if [ $# -ne 0 ]; then
+  if [ "$1" == "not_cut" ]; then
+    NOT_CUT=1
+  else
+    NOT_CUT=0
+  fi
+else
+  NOT_CUT=0
+fi
+
 source "$CURRENT_DIR/helpers.sh"
 
 
@@ -13,7 +23,9 @@ print_spotify_artist() {
     artist=`dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 2 "artist"|egrep -v "artist"|egrep -v "array"|cut -b 27-|cut -d '"' -f 1|egrep -v ^$`
     artist_length=$(expr length "$artist")
 
-    if [ $spotify_artist_max -eq 0 ]; then
+    if [ $NOT_CUT -eq 1 ]; then
+      echo $artist
+    elif [ $spotify_artist_max -eq 0 ]; then
       echo $artist
     elif [ $spotify_artist_max -ge $artist_length ]; then
       echo $artist

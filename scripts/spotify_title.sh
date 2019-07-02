@@ -2,6 +2,16 @@
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+if [ $# -ne 0 ]; then
+  if [ "$1" == "not_cut" ]; then
+    NOT_CUT=1
+  else
+    NOT_CUT=0
+  fi
+else
+  NOT_CUT=0
+fi
+
 source "$CURRENT_DIR/helpers.sh"
 
 
@@ -13,7 +23,9 @@ print_spotify_title() {
     title=`dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 1 "title"|egrep -v "title"|cut -b 44-|cut -d '"' -f 1|egrep -v ^$`
     title_length=$(expr length "$title")
 
-    if [ $spotify_title_max -eq 0 ]; then
+    if [ $NOT_CUT -eq 1 ]; then
+      echo $title
+    elif [ $spotify_title_max -eq 0 ]; then
       echo $title
     elif [ $spotify_title_max -ge $title_length ]; then
       echo $title

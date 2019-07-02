@@ -4,6 +4,8 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "$CURRENT_DIR/helpers.sh"
 
+CUT_OPTIM=$(get_tmux_option "@spotify-cut-optim" 0)
+
 spotify_interpolation=(
   "\#{spotify_status}"
   "\#{spotify_artist}"
@@ -20,10 +22,29 @@ spotify_commands=(
 do_interpolation() {
   local all_interpolated="$1"
   for ((i=0; i<${#spotify_commands[@]}; i++)); do
-    local result=$(eval ${spotify_commands[$i]})
+    if [ "$CUT_OPTIM" == "on" ]; then
+      local result=$(eval "${spotify_commands[$i]} not_cut")
+    else
+      local result=$(eval ${spotify_commands[$i]})
+    fi
     all_interpolated=${all_interpolated/${spotify_interpolation[$i]}/$result}
   done
-  echo "$all_interpolated"
+
+  spotify_length_max=$(get_tmux_option "@spotify-length-max" 50)
+  statusbar_length=$(expr length "$all_interpolated")
+
+  if [ $spotify_length_max -eq 0 ]; then
+    echo "$all_interpolated"
+  elif [ $spotify_length_max -ge $statusbar_length ]; then
+    echo "$all_interpolated"
+  elif [ "$CUT_OPTIM" == "on" ]; then
+    nb_char=$(($spotify_length_max-3))
+    statusbar_cut=$(echo $all_interpolated | cut -c -$nb_char)
+    echo -n $statusbar_cut
+    echo "..."
+  else
+    echo "$all_interpolated"
+  fi
 }
 
 print_spotify_statusbar() {
