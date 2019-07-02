@@ -5,12 +5,14 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/scripts/helpers.sh"
 
 spotify_interpolation=(
+  "\#{spotify_statusbar}"
   "\#{spotify_status}"
   "\#{spotify_artist}"
   "\#{spotify_album}"
   "\#{spotify_title}"
 )
 spotify_commands=(
+  "#($CURRENT_DIR/scripts/spotify_statusbar.sh)"
   "#($CURRENT_DIR/scripts/spotify_status.sh)"
   "#($CURRENT_DIR/scripts/spotify_artist.sh)"
   "#($CURRENT_DIR/scripts/spotify_album.sh)"
