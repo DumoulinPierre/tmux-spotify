@@ -39,8 +39,8 @@ do_interpolation() {
     echo "$all_interpolated"
   elif [ "$CUT_OPTIM" == "on" ]; then
     nb_char=$(($spotify_length_max-1))
-    statusbar_cut=$(echo $all_interpolated | cut -c -$nb_char)
-    echo -n $statusbar_cut
+    statusbar_cut=$(echo "$all_interpolated" | cut -c -$nb_char)
+    echo -n "$statusbar_cut"
     echo "…"
   else
     echo "$all_interpolated"
