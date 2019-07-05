@@ -13,6 +13,15 @@ else
 fi
 
 source "$CURRENT_DIR/helpers.sh"
+source "$HOME/.tmux/spotify/conf.sh"
+
+delete_regex() {
+  filtered="$1"
+  for ((i=0; i<${#artist_regex_before[@]}; i++)); do
+    filtered=$(echo "$filtered" | sed -E "s/${artist_regex_before[$i]}/${artist_regex_after[$i]}/g")
+  done
+  echo $filtered
+}
 
 
 print_spotify_artist() {
@@ -21,6 +30,7 @@ print_spotify_artist() {
     spotify_artist_max=$(get_tmux_option "@spotify-artist-max" 0)
 
     artist=`dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'|egrep -A 2 "artist"|egrep -v "artist"|egrep -v "array"|cut -b 27-|cut -d '"' -f 1|egrep -v ^$`
+    artist=$(delete_regex "$artist")
     artist_length=$(expr length "$artist")
 
     if [ $NOT_CUT -eq 1 ]; then

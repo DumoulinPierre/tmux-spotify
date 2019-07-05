@@ -2,6 +2,17 @@
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+CONF_DIR=~/.tmux/spotify
+CONF_PATH=~/.tmux/spotify/conf.sh
+# prepare conf file
+if [[ ! -d $CONF_DIR ]]; then
+  mkdir $CONF_DIR
+fi
+if [[ -f "$CONF_PATH" ]]; then
+  cp $CURRENT_DIR/default_conf.sh $CONF_PATH
+fi
+
+
 source "$CURRENT_DIR/scripts/helpers.sh"
 
 spotify_interpolation=(
