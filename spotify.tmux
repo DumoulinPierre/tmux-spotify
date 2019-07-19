@@ -54,5 +54,14 @@ update_tmux_option() {
 main() {
   update_tmux_option "status-right"
   update_tmux_option "status-left"
+
+  tmux unbind-key left
+  tmux unbind-key right
+  tmux unbind-key p
+
+
+  tmux bind-key left run-shell -b "$CURRENT_DIR/scripts/previous.sh"
+  tmux bind-key right run-shell -b "$CURRENT_DIR/scripts/next.sh"
+  tmux bind-key p run-shell -b "$CURRENT_DIR/scripts/toggle_play_pause.sh"
 }
 main
